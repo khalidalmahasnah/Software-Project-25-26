@@ -24,7 +24,7 @@ There is an urgent need for an integrated **Parking Management and Guidance Syst
 * **System Maintenance & IoT Technicians:** The technical team responsible for ensuring that physical sensors, cameras, and barriers remain operational and connected to the central database.
 * **Developers (Our group):** The software engineering team responsible for designing, building, and maintaining the system architecture.
 
-* ### Main Requirements
+### Main Requirements
 
 #### Functional Requirements
 1.  **Real-Time Monitoring:** The system must utilize IoT sensors and cameras to detect vehicle presence and update the database with the current status (Occupied/Free) of every parking spot instantly.
