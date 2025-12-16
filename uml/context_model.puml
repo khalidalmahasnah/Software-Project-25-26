@@ -16,7 +16,7 @@ rectangle "IoT Sensor\nNetwork" as Sensors <<system>>
 rectangle "ANPR Camera\nSystem" as ANPR <<system>>
 rectangle "Barrier Gate\nController" as Gates <<system>>
 rectangle "On-site Display\nSystem" as Displays <<system>>
-rectangle "Security\nAlert System" as Security <<system>>
+
 
 ' Relationships
 PMS -- Payment
@@ -24,6 +24,5 @@ PMS -- Sensors
 PMS -- ANPR
 PMS -- Gates
 PMS -- Displays
-PMS -- Security
 
 @enduml
