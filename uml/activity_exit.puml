@@ -1,0 +1,45 @@
+@startuml activity_exit
+!theme plain
+title Activity Diagram: Vehicle Exit Process
+
+start
+
+:Vehicle arrives at exit;
+
+:Identify vehicle;
+
+:Retrieve parking session;
+
+:Calculate parking duration;
+
+:Calculate parking fee;
+
+if (Payment required?) then (Yes)
+
+  :Verify payment status;
+
+  if (Payment completed?) then (Yes)
+    :Approve exit;
+  else (No)
+    :Request payment;
+    :Deny exit;
+  :Call security staff;
+    stop
+  endif
+
+else (No)
+  :Approve exit;
+endif
+
+:Record exit time;
+
+fork
+  :Release parking spot;
+fork again
+  :Update parking records;
+end fork
+
+:Vehicle exits parking facility;
+
+stop
+@enduml
