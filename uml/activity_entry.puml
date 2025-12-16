@@ -1,0 +1,39 @@
+@startuml activity_entry
+!theme plain
+title Activity Diagram: Vehicle Entry Process
+
+start
+
+:Vehicle arrives at entry;
+
+:Identify vehicle;
+
+if (Vehicle registered or reserved?) then (Yes)
+  :Retrieve reservation details;
+else (No)
+  if (Parking spots available?) then (Yes)
+    :Create walk-in entry;
+  else (No)
+    :Display parking full message;
+    stop
+  endif
+endif
+
+:Record entry time;
+
+if (Vehicle has violations?) then (Yes)
+  :Notify driver of violation;
+  else (no)
+  
+endif 
+
+fork
+  :Grant entry access;
+fork again
+  :Update parking occupancy;
+end fork
+
+:Vehicle enters parking;
+
+stop
+@enduml
