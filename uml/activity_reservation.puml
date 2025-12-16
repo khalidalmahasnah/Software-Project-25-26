@@ -1,1 +1,47 @@
+@startuml activity_reservation
+!theme plain
+title Activity Diagram: Parking Reservation Process
+
+start
+
+:Enter reservation details
+(date, duration);
+
+:Check parking availability;
+
+if (Spots available?) then (Yes)
+
+  :Select parking spot;
+
+  fork
+    :Calculate total fee;
+  fork again
+    :Prepare reservation data;
+  end fork
+
+  :Process payment;
+
+  if (Payment successful?) then (Yes)
+
+    :Generate reservation;
+    :Update parking status;
+
+    fork
+      :Send confirmation to user;
+    fork again
+      :Update reservation register;
+    end fork
+
+  else (No)
+    :Show payment error;
+    stop
+  endif
+
+else (No)
+  :Show no availability message;
+  stop
+endif
+
+stop
+@enduml
 
