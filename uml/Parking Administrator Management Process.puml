@@ -1,0 +1,40 @@
+@startuml activity_admin
+!theme plain
+title Activity Diagram: Parking Administrator Management Process
+
+start
+
+:Administrator logs into dashboard;
+
+:Authenticate credentials;
+
+if (Authentication successful?) then (Yes)
+
+  :Access admin dashboard;
+
+  fork
+    :Monitor parking occupancy;
+  fork again
+    :View financial reports;
+  fork again
+    :Manage pricing models;
+  end fork
+
+  if (Pricing update required?) then (Yes)
+    :Modify pricing rules;
+    :Apply new pricing model;
+  endif
+
+  :Review daily operations;
+
+  :Log out;
+
+else (No)
+
+  :Display access denied message;
+  stop
+
+endif
+
+stop
+@enduml
