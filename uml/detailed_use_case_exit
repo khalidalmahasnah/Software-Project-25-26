@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+!theme plain
+
+actor Driver
+actor "Payment System" as PaymentSystem
+actor "Security Staff" as Security
+
+rectangle "Parking Management System" {
+  Driver -- (Request Exit)
+  (Request Exit) .> (Calculate Parking Fee) : <<include>>
+  (Request Exit) .> (Verify Payment Status) : <<include>>
+  (Request Exit) .> (Approve Exit) : <<include>>
+  (Request Exit) .> (Call Security Staff) : <<extend>>
+}
+
+PaymentSystem -- (Verify Payment Status)
+Security -- (Call Security Staff)
+
+@enduml
