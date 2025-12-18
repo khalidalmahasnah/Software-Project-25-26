@@ -4,49 +4,55 @@
 
 ### Problem Statement
 
-In high-density environments such as universities, shopping malls, and city centers, finding a parking space fast is really frustrating and inefficient. Drivers waste alot of time and fuel circling lots searching for open spots, which contributes to traffic congestion and increased carbon emissions.
+In high-density environments such as universities, shopping malls, and city centers, finding a parking space quickly is inefficient. Drivers waste significant time and fuel circling lots searching for open spots, contributing to traffic congestion and carbon emissions.
 
-Currently, most parking facilities rely on manual management or outdated legacy systems. These systems suffer from several critical issues:
-1.  **Lack of Visibility:** Drivers dont know if a spot is available before arriving.
-2.  **Inefficient Entry/Exit:** Manual ticketing and cash payments create bottlenecks at gates.
-3.  **Poor Management Data:** Administrators lack real-time insights into occupancy rates, making it difficult to optimize pricing or manage peak hours effectively.
+Currently, most parking facilities rely on manual management or outdated legacy systems. These suffer from critical issues:
+1.  **Lack of Visibility:** Drivers do not know if a spot is available before arriving.
+2.  **Inefficient Entry/Exit:** Manual ticketing creates bottlenecks.
+3.  **Poor Management Data:** Administrators lack real-time insights into occupancy and revenue.
+4.  **Security Gaps:** Manual checks often miss vehicle violations or unauthorized access attempts.
 
-There is an urgent need for an integrated **Parking Management and Guidance System** that leverages IoT sensors and mobile technology to automate access, streamline payments, and guide users to available spots in real-time.
+There is an urgent need for an integrated **Parking Management and Guidance System** that leverages IoT sensors, ANPR (Automatic Number Plate Recognition), and mobile technology to automate access, enforce security protocols, and guide users in real-time.
+
 ### Stakeholders
 
 #### 1. Primary Actors (Direct Users)
-* **Drivers / Vehicle Owners:** The primary end-users who interact with the mobile app and kiosks to find parking, make reservations, and pay fees. Their main interest is convenience and time-saving.
-* **Parking Administrators:** Staff members who use the web dashboard to monitor occupancy, set pricing models, and view financial reports.
-* **Security Personnel:** Staff who may receive alerts regarding unauthorized parking or barrier malfunctions.
+* [cite_start]**Drivers / Vehicle Owners:** The primary end-users who use the system to find parking, make reservations, and pay fees[cite: 253, 267, 273]. [cite_start]They can be "Walk-in" users or "Registered" users with reservations[cite: 256].
+* [cite_start]**Parking Administrators:** Staff who use the dashboard to monitor occupancy, manage pricing models, and view financial reports[cite: 268, 270, 271].
+* [cite_start]**Security Staff:** Personnel who are automatically notified by the system in cases of unauthorized entry, unresolved violations, or payment refusals at the exit[cite: 263, 266, 283].
 
 #### 2. Secondary Stakeholders (Business & Technical)
-* **Facility Management (e.g., University or Mall Management):** The owners of the parking facility. They are interested in maximizing revenue, optimizing space usage, and reducing traffic congestion on their premises.
-* **System Maintenance & IoT Technicians:** The technical team responsible for ensuring that physical sensors, cameras, and barriers remain operational and connected to the central database.
-* **Developers (Our group):** The software engineering team responsible for designing, building, and maintaining the system architecture.
+* [cite_start]**Payment System:** An external system actor responsible for processing transaction requests and verifying payment status during reservations and exit procedures[cite: 253, 300, 301].
+* **Facility Management:** The owners interested in revenue maximization and space optimization.
+* **System Maintenance Team:** Responsible for IoT sensors and barrier hardware.
 
 ### Main Requirements
 
 #### Functional Requirements
-1.  **Real-Time Monitoring:** The system must utilize IoT sensors and cameras to detect vehicle presence and update the database with the current status (Occupied/Free) of every parking spot instantly.
-2.  **Reservation Management:** Registered users must be able to search for available spots and reserve a specific location for a defined time slot via the mobile application.
-3.  **Automated Access Control:** The entry/exit barriers must automatically open upon recognizing a valid license plate or scanning a valid reservation QR code.
-4.  **Guidance System:** The system must provide visual navigation (via app or on-site displays) to guide the driver to their assigned or nearest available spot.
-5.  **Payment Processing:** The system must calculate parking fees based on duration and allow users to make secure payments using credit cards or digital wallets.
-6.  **Admin Dashboard:** Administrators must be able to view live occupancy heatmaps, generate revenue reports, and configure pricing rules (e.g., peak vs. off-peak hours).
+1.  [cite_start]**Real-Time Monitoring & Availability Check:** The system must check parking availability instantly for both reservation requests and walk-in vehicles, displaying a "Parking Full" message if no spots are available[cite: 256, 257, 285].
+2.  **Reservation Management:** Users can search for spots, enter details (date/duration), and pay in advance. [cite_start]The system must support **modification** and **cancellation** of these reservations, including refund/penalty calculations and updating the reservation register[cite: 274, 278, 279].
+3.  **Automated Entry Control:**
+    * [cite_start]**Identification:** Identify the vehicle via ANPR[cite: 254].
+    * [cite_start]**Authorization:** Verify if the vehicle has a valid reservation or if a walk-in spot is available[cite: 255, 256].
+    * **Violation Check:** The system must check for existing violations. [cite_start]If a violation exists, it prompts for resolution; if unresolved, entry is denied and security is called[cite: 261, 263].
+4.  **Automated Exit Control:**
+    * [cite_start]**Fee Calculation:** Calculate the parking duration and fee upon exit[cite: 280, 281].
+    * **Payment Verification:** Verify if payment is completed. [cite_start]If not, request payment; if denied, call security[cite: 282, 283].
+5.  [cite_start]**Dynamic Pricing Management:** Administrators must be able to modify pricing rules and apply new pricing models based on operational data[cite: 271].
+6.  [cite_start]**Admin Dashboard:** A secured interface for administrators to monitor occupancy, view financial reports, and manage user accounts[cite: 269, 270, 298].
 
 #### Non-Functional Requirements
-1.  **Performance:** The system must update parking spot availability status on the user app within 5 seconds of a sensor state change.
-2.  **Scalability:** The backend architecture must support the addition of new sensors and parking zones without requiring significant system downtime.
-3.  **Reliability:** The system must maintain 99.9% uptime, with a failover mechanism for the barrier gates in case of network loss (e.g., manual override).
-4.  **Security:** All payment transactions and user data (including license plates and passwords) must be encrypted in transit and at rest.
-5.  **Usability:** The mobile application interface should be intuitive, requiring no more than 3 clicks to reserve a spot.
-
+1.  **Performance:** The system must update parking spot availability on the user app within 5 seconds of a sensor state change.
+2.  **Reliability:** The system must maintain 99.9% uptime, with a failover mechanism for barrier gates (e.g., manual override).
+3.  **Security:** All payment transactions and user credentials must be encrypted. [cite_start]Access to the Admin Dashboard must be secured via authentication[cite: 268, 296].
+4.  **Scalability:** The architecture must support the addition of new sensors and parking zones without significant downtime.
+5.  **Usability:** The mobile interface should be intuitive, allowing users to complete a reservation in under 3 clicks.
 
 ### Assumptions
 
-1.  **Hardware Availability:** We assume that the necessary hardware infrastructure (IoT ultrasonic sensors, ANPR cameras, and automated barrier gates) is already installed and functional at the parking facility.
-2.  **Network Connectivity:** The parking facility is equipped with a stable, high-speed internet connection to ensure real-time communication between the local sensors and the central cloud server.
-3.  **User Technology:** All users (drivers) possess a smartphone with an active internet connection to access the mobile application for reservations and payments.
-4.  **Payment API Integration:** A third-party Payment Gateway API (PayPal) is available for integration and handles the actual processing of credit card transactions securely.
-5.  **Single Vehicle per Spot:** The physical parking spots are standard-sized, and one spot accommodates exactly one passenger vehicle.
-6.  **Regulatory Compliance:** It is assumed that storing license plate data and user records complies with local privacy regulations and that users consent to data collection upon registration.
+1.  **Hardware Availability:** The facility is equipped with functioning IoT ultrasonic sensors, ANPR cameras for vehicle identification, and automated barrier gates.
+2.  **Network Connectivity:** A stable high-speed internet connection exists to link local sensors with the central database.
+3.  **User Technology:** Users possess smartphones with internet access for the app.
+4.  [cite_start]**Payment Integration:** A third-party Payment System is available to verify status and process transactions in real-time[cite: 301].
+5.  [cite_start]**Violation Data:** The system has access to a database or logical rule set to define and identify "vehicle violations" (e.g., previous unpaid fees)[cite: 261].
+6.  **Regulatory Compliance:** Data storage complies with local privacy laws regarding license plate data.
