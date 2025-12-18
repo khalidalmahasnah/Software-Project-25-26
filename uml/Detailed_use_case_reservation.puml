@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+!theme plain
+
+actor Driver
+actor "Payment System" as Payment
+
+rectangle "Parking Management System" {
+
+  (Make Reservation)
+
+  (Make Reservation) .> (Enter Reservation Details) : <<include>>
+  (Make Reservation) .> (Check Parking Availability) : <<include>>
+  (Make Reservation) .> (Select Parking Spot) : <<include>>
+  (Make Reservation) .> (Calculate Reservation Fee) : <<include>>
+  (Make Reservation) .> (Process Payment) : <<include>>
+  (Make Reservation) .> (Generate Reservation Confirmation) : <<include>>
+
+}
+
+Driver -- (Make Reservation)
+Payment -- (Process Payment)
+
+@enduml
