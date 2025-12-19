@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+!theme plain
+
+actor Driver
+
+rectangle "Parking Management System" {
+  Driver -- (Register / Login)
+  Driver -- (Manage Account)
+  Driver -- (Make Reservation)
+  Driver -- (Modify Reservation)
+  Driver -- (Cancel Reservation)
+  Driver -- (Enter Parking)
+  Driver -- (Exit Parking)
+  Driver -- (Make Payment)
+  Driver -- (View Reservation History)
+}
+
+@enduml
