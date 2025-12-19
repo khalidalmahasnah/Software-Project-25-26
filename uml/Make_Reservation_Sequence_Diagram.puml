@@ -1,0 +1,43 @@
+@startuml
+!theme plain
+
+actor Driver
+participant "RS: Reservation Service" as RS
+participant "DB: Parking Database" as DB
+participant "PS: Payment System" as PS
+
+Driver -> RS : makeReservation(details)
+activate RS
+
+RS -> DB : checkAvailability(date, duration)
+activate DB
+DB --> RS : availabilityResult
+deactivate DB
+
+alt spots available
+    RS --> Driver : displayAvailableSpots()
+    Driver -> RS : selectParkingSpot(spotID)
+
+    RS -> RS : calculateReservationFee()
+    RS -> PS : processPayment(amount)
+    activate PS
+    PS --> RS : paymentConfirmation
+    deactivate PS
+
+    alt payment successful
+        RS -> DB : storeReservation(details, spotID)
+        activate DB
+        DB --> RS : reservationStored
+        deactivate DB
+
+        RS --> Driver : sendReservationConfirmation()
+    else payment failed
+        RS --> Driver : displayPaymentError()
+    end
+
+else no spots available
+    RS --> Driver : displayNoAvailabilityMessage()
+end
+
+deactivate RS
+@enduml
