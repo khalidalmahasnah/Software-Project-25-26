@@ -1,0 +1,52 @@
+@startuml
+!theme plain
+title Activity Diagram: User Account Management (Driver & Administrator)
+
+start
+
+:User opens system;
+
+if (User type?) then (Driver)
+
+  if (Has account?) then (No)
+    :Enter registration details;
+    :Validate registration data;
+
+    if (Data valid?) then (Yes)
+      :Create driver account;
+      :Store driver credentials;
+      :Display registration success;
+    else (No)
+      :Display validation error;
+      stop
+    endif
+  endif
+
+else (Administrator)
+
+  :Enter admin credentials;
+endif
+
+:Enter login credentials;
+:Authenticate user;
+
+if (Authentication successful?) then (Yes)
+
+  if (User role?) then (Driver)
+    :Access driver dashboard;
+    :View / Update profile;
+    :View reservations;
+  else (Administrator)
+    :Access admin dashboard;
+    :Manage system settings;
+    :Monitor parking operations;
+  endif
+
+  :Logout;
+
+else (No)
+  :Display authentication error;
+endif
+
+stop
+@enduml
