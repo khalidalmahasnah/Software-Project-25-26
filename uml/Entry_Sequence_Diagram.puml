@@ -1,0 +1,59 @@
+@startuml
+!theme plain
+
+actor Driver
+participant "PMS: Parking Management System" as PMS
+participant "DB: Parking Database" as DB
+participant "PS: Payment System" as PS
+participant "Security Staff" as SS
+
+Driver -> PMS : arriveAtEntry(vehicleID)
+activate PMS
+
+PMS -> DB : identifyVehicle(vehicleID)
+activate DB
+DB --> PMS : vehicleInfo
+deactivate DB
+
+PMS -> DB : verifyReservationOrAuthorization(vehicleID)
+activate DB
+DB --> PMS : authorizationStatus
+deactivate DB
+
+alt authorized
+    PMS -> DB : checkParkingAvailability()
+    activate DB
+    DB --> PMS : availabilityStatus
+    deactivate DB
+
+    alt spots available
+        PMS -> PS : verifyPaymentStatus(vehicleID)
+        activate PS
+        PS --> PMS : paymentStatus
+        deactivate PS
+
+        alt payment valid
+            PMS -> DB : recordEntryTime(vehicleID)
+            activate DB
+            DB --> PMS : entryRecorded
+
+            PMS -> DB : updateParkingOccupancy()
+            DB --> PMS : occupancyUpdated
+            deactivate DB
+
+            PMS --> Driver : grantEntryAccess()
+        else unpaid fees
+            PMS --> Driver : denyEntryUnpaidFees()
+        end
+
+    else parking full
+        PMS --> Driver : displayParkingFullMessage()
+    end
+
+else unauthorized
+    PMS --> Driver : denyEntry()
+    PMS -> SS : callSecurityStaff()
+end
+
+deactivate PMS
+@enduml
