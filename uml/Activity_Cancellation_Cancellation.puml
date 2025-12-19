@@ -1,0 +1,47 @@
+@startuml
+!theme plain
+title Activity Diagram: Reservation Modification / Cancellation Process
+
+start
+
+:User accesses reservation list;
+:Select existing reservation;
+
+fork
+  :Request reservation modification;
+fork again
+  :Request reservation cancellation;
+end fork
+
+if (Modification requested?) then (Yes)
+
+  :Enter updated reservation details;
+  :Check parking availability;
+
+  if (Spots available?) then (Yes)
+    :Recalculate reservation fee;
+    :Update reservation details;
+    :Update parking status;
+    :Send modification confirmation;
+  else (No)
+    :Display unavailability message;
+  endif
+
+else (Cancellation requested?)
+
+  :Confirm cancellation request;
+  :Check cancellation policy;
+
+  fork
+    :Calculate refund or penalty;
+  fork again
+    :Release reserved parking spot;
+  end fork
+
+  :Update reservation register;
+  :Send cancellation confirmation;
+
+endif
+
+stop
+@enduml
