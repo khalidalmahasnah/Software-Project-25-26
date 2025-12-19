@@ -8,32 +8,60 @@ start
 
 :Identify vehicle;
 
-if (Vehicle registered or reserved?) then (Yes)
-  :Retrieve reservation details;
-else (No)
-  if (Parking spots available?) then (Yes)
-    :Create walk-in entry;
+if (Vehicle authorized?) then (Yes)
+
+  if (Vehicle has reservation?) then (Yes)
+    :Retrieve reservation details;
   else (No)
-    :Display parking full message;
+
+    :Check parking availability;
+
+    if (Spots available?) then (Yes)
+      :Create walk-in entry;
+    else (No)
+      :Display parking full message;
+      stop
+    endif
+
+  endif
+
+  :Verify payment status;
+
+  if (Payment valid?) then (Yes)
+    :Record entry time;
+  else (No)
+    :Deny entry due to unpaid fees;
     stop
   endif
+
+  if (Vehicle has violations?) then (Yes)
+    :Notify driver of violation;
+    :Require violation resolution;
+
+    if (Violation resolved?) then (Yes)
+      :Clear violation flag;
+    else (No)
+      :Deny entry due to unresolved violation;
+      :Call security staff;
+      stop
+    endif
+  endif
+
+  fork
+    :Grant entry access;
+  fork again
+    :Update parking occupancy;
+  end fork
+
+  :Vehicle enters parking;
+
+else (No)
+
+  :Deny entry;
+  :Call security staff;
+  stop
+
 endif
-
-:Record entry time;
-
-if (Vehicle has violations?) then (Yes)
-  :Notify driver of violation;
-  else (no)
-  
-endif 
-
-fork
-  :Grant entry access;
-fork again
-  :Update parking occupancy;
-end fork
-
-:Vehicle enters parking;
 
 stop
 @enduml
