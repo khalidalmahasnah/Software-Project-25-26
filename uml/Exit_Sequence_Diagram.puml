@@ -1,0 +1,44 @@
+@startuml
+!theme plain
+
+actor Driver
+participant "PMS: Parking Management System" as PMS
+participant "DB: Parking Database" as DB
+participant "PS: Payment System" as PS
+participant "Security Staff" as SS
+
+Driver -> PMS : requestExit()
+activate PMS
+
+PMS -> DB : retrieveParkingSession(vehicleID)
+activate DB
+DB --> PMS : parkingSession
+deactivate DB
+
+PMS -> DB : calculateParkingFee(parkingSession)
+activate DB
+DB --> PMS : parkingFee
+deactivate DB
+
+PMS -> PS : verifyPaymentStatus(amount)
+activate PS
+PS --> PMS : paymentStatus
+deactivate PS
+
+alt payment completed
+    PMS -> DB : recordExitTime(vehicleID)
+    activate DB
+    DB --> PMS : exitRecorded
+
+    PMS -> DB : releaseParkingSpot(vehicleID)
+    DB --> PMS : spotReleased
+    deactivate DB
+
+    PMS --> Driver : approveExit()
+else payment not completed
+    PMS --> Driver : requestPayment()
+    PMS -> SS : callSecurityStaff()
+end
+
+deactivate PMS
+@enduml
