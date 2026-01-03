@@ -1,0 +1,217 @@
+@startuml
+!theme plain
+title Class Diagram: Parking Management System
+
+' =========================
+' Core User Hierarchy
+' =========================
+
+class User {
+  - userID: String
+  - name: String
+  - email: String
+  - passwordHash: String
+  + login(): boolean
+  + logout(): void
+}
+
+class Driver {
+  - driverID: String
+  - storedPaymentMethod: String
+  + register(): boolean
+  + addVehicle(v: Vehicle): void
+  + makeReservation(spot: ParkingSpot): Reservation
+  + viewHistory(): List<ParkingSession>
+}
+
+class Administrator {
+  - adminRole: String
+  + createPricingPolicy(p: PricingPolicy): void
+  + generateReport(date: Date): Report
+  + viewOccupancy(): void
+}
+
+class SecurityStaff {
+  - employeeID: String
+  - shift: String
+  + receiveAlert(n: Notification): void
+  + resolveViolation(v: Violation): void
+}
+
+User <|-- Driver
+User <|-- Administrator
+User <|-- SecurityStaff
+
+
+' =========================
+' Parking Infrastructure
+' =========================
+
+class ParkingLot {
+  - lotID: int
+  - name: String
+  - totalCapacity: int
+  - currentOccupancy: int
+  + checkAvailability(): boolean
+  + getFreeSpots(): List<ParkingSpot>
+}
+
+class ParkingSpot {
+  - spotID: String
+  - floor: int
+  - type: SpotType
+  - isOccupied: boolean
+  + updateStatus(status: boolean): void
+  + lockSpot(): void
+}
+
+class Sensor {
+  - sensorID: String
+  - status: boolean
+  - lastMaintenance: Date
+  + detectVehicle(): void
+  + sendStatus(): void
+}
+
+ParkingLot "1" *-- "1..*" ParkingSpot : contains >
+ParkingSpot "1" o-- "1" Sensor : monitored by >
+
+
+' =========================
+' Vehicle & Usage
+' =========================
+
+class Vehicle {
+  - licensePlate: String
+  - make: String
+  - model: String
+  - color: String
+  + getHistory(): List<ParkingSession>
+}
+
+Driver "1" o-- "1..*" Vehicle : owns >
+Vehicle "1" -- "0..*" ParkingSession : has >
+Vehicle "1" -- "0..*" Violation : incurs >
+Vehicle "1" -- "0..*" Reservation : booked for >
+
+
+' =========================
+' Reservation & Session
+' =========================
+
+class Reservation {
+  - reservationID: String
+  - startTime: DateTime
+  - endTime: DateTime
+  - totalFee: double
+  - status: ReservationStatus
+  + confirmBooking(): void
+  + cancel(): boolean
+}
+
+class ParkingSession {
+  - sessionID: String
+  - entryTime: DateTime
+  - exitTime: DateTime
+  - actualDuration: double
+  - totalFee: double
+  + calculateFee(policy: PricingPolicy): double
+  + endSession(): void
+}
+
+Reservation "0..1" -- "1" ParkingSession : converts to >
+ParkingSession "1" -- "1" ParkingSpot : occupies >
+
+
+' =========================
+' Pricing & Payment
+' =========================
+
+class PricingPolicy {
+  - policyID: String
+  - name: String
+  - baseRate: double
+  - peakHourMultiplier: double
+  - penaltyRate: double
+  + calculateRate(duration: int, time: DateTime): double
+}
+
+class Payment {
+  - transactionID: String
+  - amount: double
+  - timestamp: DateTime
+  - method: String
+  - status: boolean
+  + process(): boolean
+  + refund(): void
+}
+
+ParkingLot "1" o-- "1..*" PricingPolicy : applies >
+ParkingSession "1" -- "1..*" Payment : paid by >
+Reservation "0..1" -- "0..1" Payment : prepaid by >
+
+ParkingSession ..> PricingPolicy : uses >
+
+
+' =========================
+' Violations & Notifications
+' =========================
+
+class Violation {
+  - violationID: String
+  - type: String
+  - description: String
+  - fineAmount: double
+  - isResolved: boolean
+  + markResolved(): void
+}
+
+class Notification {
+  - notificationID: String
+  - message: String
+  - sentTime: DateTime
+  - isRead: boolean
+  + sendPush(): void
+  + sendEmail(): void
+}
+
+Notification "1" --> "1" User : delivered to >
+SecurityStaff "1" ..> "0..*" Violation : resolves >
+
+
+' =========================
+' Reporting
+' =========================
+
+class Report {
+  - reportID: String
+  - generatedDate: Date
+  - content: String
+  - totalRevenue: double
+  + exportPDF(): void
+}
+
+Administrator "1" ..> "0..*" Report : generates >
+Administrator "1" ..> "1..*" PricingPolicy : configures >
+
+
+' =========================
+' Enumerations
+' =========================
+
+enum SpotType {
+  STANDARD
+  HANDICAP
+  EV_CHARGING
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+Reservation ..> ReservationStatus
+ParkingSpot ..> SpotType
+@enduml
