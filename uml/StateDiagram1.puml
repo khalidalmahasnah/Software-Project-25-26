@@ -1,0 +1,48 @@
+@startuml
+title State Diagram: Vehicle Entry (Entry Gate Controller)
+
+' --- Vertical layout ---
+top to bottom direction
+skinparam shadowing false
+skinparam state {
+  BackgroundColor White
+  BorderColor Black
+  FontSize 14
+}
+skinparam ArrowColor Black
+
+[*] --> Idle
+
+Idle --> DetectVehicle : Vehicle arrives at entry lane
+
+DetectVehicle --> CapturePlate : Sensor triggered / ANPR capture
+CapturePlate --> ValidateIdentity : Plate number extracted
+
+ValidateIdentity --> DenyEntry : Plate not recognized / blacklisted
+ValidateIdentity --> CheckReservation : Plate valid
+
+CheckReservation --> CheckAvailability : No reservation found
+CheckReservation --> VerifyPayment : Reservation found
+
+CheckAvailability --> DenyEntry : Parking lot full
+CheckAvailability --> CreateSession : Spot available (walk-in)
+
+CreateSession --> VerifyPayment : Session created
+
+VerifyPayment --> RequestPayment : Payment missing / invalid
+VerifyPayment --> CheckViolations : Payment valid
+
+RequestPayment --> VerifyPayment : Payment completed
+RequestPayment --> DenyEntry : Payment failed / timeout
+
+CheckViolations --> DenyEntry : Unresolved violations exist
+CheckViolations --> OpenGate : No violations
+
+OpenGate --> RecordEntry : Gate opened successfully
+RecordEntry --> UpdateOccupancy : Store entry time + assign spot
+UpdateOccupancy --> [*]
+
+DenyEntry --> AlertSecurity : Log denial + notify security
+AlertSecurity --> [*]
+
+@enduml
