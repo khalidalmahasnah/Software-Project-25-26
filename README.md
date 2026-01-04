@@ -17,9 +17,13 @@ This folder contains the core project deliverables and reports:
     * Functional & Non-Functional Requirements.
     * Assumptions.
     * Embedded UML Diagrams.
-* **`Diagram_Explanations.pdf`**: A detailed reference document containing:
+* **`Diagram_Explanations_v1.pdf`**: A detailed reference document released with the first tag v.1.0.0 containing:
+    * Text explanations for every diagram used in the project for part one and part two.
+    * **Comprehensive Tabular Descriptions** for the Use Case diagrams (Goals, Preconditions, Postconditions, and Scenarios).
+* **`Diagram_Explanations_v2.pdf`**: A detailed reference document released with the second tag v.2.0.0 containing:
     * Text explanations for every diagram used in the project.
     * **Comprehensive Tabular Descriptions** for the Use Case diagrams (Goals, Preconditions, Postconditions, and Scenarios).
+    * Explanation for every diagram made in the entire project.
 * **`report.pdf`**: The PDF version of the final report (generated from Markdown).
 
 ### 📂 `/uml` - Diagram Source Code
@@ -28,7 +32,9 @@ This folder contains the **PlantUML (.puml)** source code files for all diagrams
 * `activity_*.puml` (Entry, Exit, Reservation, Admin flows)
 * `sequence_*.puml` (Interaction flows)
 * `use_case_*.puml` (Actor interactions)
-
+* `class_diagram.puml` 
+* `state_diagram_*.puml`
+* 
 ## Tools & Workflow
 * **Visual Studio Code**: Primary editor.
 * **PlantUML**: Used for generating all UML diagrams.
