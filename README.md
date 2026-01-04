@@ -33,7 +33,7 @@ This folder contains the **PlantUML (.puml)** source code files for all diagrams
 * `sequence_*.puml` (Interaction flows)
 * `use_case_*.puml` (Actor interactions)
 * `class_diagram.puml` 
-* `statediagram*.puml`
+* `StateDiagram*.puml`
 
 ## Tools & Workflow
 * **Visual Studio Code**: Primary editor.
