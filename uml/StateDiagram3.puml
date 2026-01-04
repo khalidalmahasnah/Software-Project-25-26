@@ -1,0 +1,36 @@
+@startuml
+title State Diagram: Reservation Lifecycle (Corrected)
+
+top to bottom direction
+skinparam shadowing false
+skinparam state {
+  BackgroundColor White
+  BorderColor Black
+  FontSize 14
+}
+skinparam ArrowColor Black
+
+[*] --> Draft
+
+Draft --> PendingPayment : Reservation details submitted
+
+PendingPayment --> Confirmed : Payment successful
+PendingPayment --> Cancelled : Payment failed / timeout
+
+Confirmed --> ModifyRequested : Driver requests modification
+ModifyRequested --> Confirmed : Modification accepted (reservation updated)
+ModifyRequested --> Confirmed : Modification rejected (keep original)
+
+Confirmed --> Active : Vehicle enters within time window
+Active --> Completed : Vehicle exits
+
+Confirmed --> Cancelled : Driver cancels reservation (policy applies)
+
+Active --> ViolationHold : Violation detected (overstay/unpaid/etc.)
+ViolationHold --> Active : Violation resolved
+ViolationHold --> Completed : Exit allowed after resolution
+
+Cancelled --> [*]
+Completed --> [*]
+
+@enduml
