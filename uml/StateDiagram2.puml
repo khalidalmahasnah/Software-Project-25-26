@@ -1,0 +1,39 @@
+@startuml
+title State Diagram: Vehicle Exit (Exit Gate Controller)
+
+top to bottom direction
+skinparam shadowing false
+skinparam state {
+  BackgroundColor White
+  BorderColor Black
+  FontSize 14
+}
+skinparam ArrowColor Black
+
+[*] --> Idle
+
+Idle --> DetectVehicle : Vehicle arrives at exit lane
+
+DetectVehicle --> CapturePlate : Sensor triggered / ANPR capture
+CapturePlate --> RetrieveSession : Plate number extracted
+
+RetrieveSession --> DenyExit : No active session found
+RetrieveSession --> CalculateFee : Active session found
+
+CalculateFee --> CheckPayment : Fee calculated
+
+CheckPayment --> RequestPayment : Payment pending / insufficient
+CheckPayment --> OpenGate : Payment completed or not required
+
+RequestPayment --> CheckPayment : Payment completed
+RequestPayment --> DenyExit : Payment failed / timeout
+
+OpenGate --> RecordExit : Gate opened successfully
+RecordExit --> ReleaseSpot : Store exit time + release parking spot
+ReleaseSpot --> ArchiveSession : Update DB and archive session
+ArchiveSession --> [*]
+
+DenyExit --> AlertSecurity : Log denial + notify security
+AlertSecurity --> [*]
+
+@enduml
